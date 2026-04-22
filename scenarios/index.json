@@ -1,0 +1,50 @@
+{
+  "scenarios": [
+    {
+      "id": 1,
+      "name": "Normal Cargo Ship",
+      "file": "scenario_1_cargo.json",
+      "vessel_type": "cargo",
+      "expected_confidence": "high",
+      "scenario_type": "normal_classification",
+      "anomaly_flag": false
+    },
+    {
+      "id": 2,
+      "name": "Speedboat \u2014 Clear Classification",
+      "file": "scenario_2_speedboat.json",
+      "vessel_type": "speedboat",
+      "expected_confidence": "medium_high",
+      "scenario_type": "normal_classification",
+      "anomaly_flag": false
+    },
+    {
+      "id": 3,
+      "name": "Submarine / Stealth Object",
+      "file": "scenario_3_submarine.json",
+      "vessel_type": "submarine",
+      "expected_confidence": "medium",
+      "scenario_type": "stealth_detection",
+      "anomaly_flag": false
+    },
+    {
+      "id": 4,
+      "name": "Low Confidence Signal",
+      "file": "scenario_4_low_confidence.json",
+      "vessel_type": "low_confidence",
+      "expected_confidence": "low",
+      "scenario_type": "low_confidence",
+      "anomaly_flag": false
+    },
+    {
+      "id": 5,
+      "name": "Anomaly \u2014 Unknown Pattern",
+      "file": "scenario_5_anomaly.json",
+      "vessel_type": "anomaly",
+      "expected_confidence": "unknown",
+      "scenario_type": "anomaly",
+      "anomaly_flag": true
+    }
+  ],
+  "total": 5
+}

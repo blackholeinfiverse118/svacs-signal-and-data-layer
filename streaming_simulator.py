@@ -1,8 +1,9 @@
 """
-SVACS Signal Layer — streaming_simulator.py
+SVACS Signal Layer -- streaming_simulator.py
 ============================================
 Simulates real-time acoustic signal streaming to the SVACS pipeline.
 20-50ms delay between chunks, non-blocking loop.
+Every emitted chunk includes trace_id for end-to-end traceability.
 
 Usage:
   python streaming_simulator.py --vessel cargo --duration 10
@@ -34,22 +35,34 @@ class StreamTransport:
 
     def _send_print(self, chunk):
         if self.verbose:
-            ts = chunk.get("timestamp", 0)
-            vtype = chunk.get("vessel_type", "?")
-            n = len(chunk.get("samples", []))
-            conf = chunk.get("metadata", {}).get("confidence_expected", "?")
-            tag = chunk.get("metadata", {}).get("scenario_tag", "")
-            print(f"[STREAM #{self._chunk_count:04d}] ts={ts:.4f} | vessel={vtype:<16} | n_samples={n} | conf={conf:<12} | tag={tag}")
+            ts       = chunk.get("timestamp", 0)
+            vtype    = chunk.get("vessel_type", "?")
+            n        = len(chunk.get("samples", []))
+            conf     = chunk.get("metadata", {}).get("confidence_expected", "?")
+            tag      = chunk.get("metadata", {}).get("scenario_tag", "")
+            trace_id = chunk.get("trace_id", "NO-TRACE")[:8]
+            anomaly  = chunk.get("expected_label", {}).get("anomaly_flag", False)
+            print(
+                f"[STREAM #{self._chunk_count:04d}] "
+                f"trace={trace_id}...  "
+                f"ts={ts:.4f}  "
+                f"vessel={vtype:<16}  "
+                f"n={n}  conf={conf:<12}  "
+                f"anomaly={anomaly}  tag={tag}"
+            )
 
     def _send_http(self, chunk):
         try:
             import urllib.request
             payload = json.dumps(chunk).encode("utf-8")
-            req = urllib.request.Request(self.endpoint, data=payload,
-                headers={"Content-Type": "application/json"}, method="POST")
+            req = urllib.request.Request(
+                self.endpoint, data=payload,
+                headers={"Content-Type": "application/json"}, method="POST"
+            )
             with urllib.request.urlopen(req, timeout=0.5) as resp:
                 if self.verbose:
-                    print(f"[STREAM #{self._chunk_count:04d}] -> HTTP {resp.status} | vessel={chunk.get('vessel_type')}")
+                    trace_id = chunk.get("trace_id", "NO-TRACE")[:8]
+                    print(f"[STREAM #{self._chunk_count:04d}] trace={trace_id}...  -> HTTP {resp.status} | vessel={chunk.get('vessel_type')}")
         except Exception as e:
             if self.verbose:
                 print(f"[STREAM #{self._chunk_count:04d}] -> HTTP FAIL: {e}")
@@ -94,21 +107,25 @@ def stream_from_scenario(scenario_path, delay_ms_min=20, delay_ms_max=50,
     with open(scenario_path, "r") as f:
         scenario = json.load(f)
 
-    chunk = scenario.get("signal", {})
+    chunk  = scenario.get("signal", {})
     labels = scenario.get("labels", {})
-    name = scenario.get("scenario_name", "unknown")
+    name   = scenario.get("scenario_name", "unknown")
     transport = StreamTransport(endpoint=endpoint, verbose=verbose)
 
     print(f"\n{'='*60}")
     print(f"SVACS SCENARIO REPLAY: {name}")
-    print(f"  Vessel Type  : {labels.get('vessel_type', '?')}")
-    print(f"  Confidence   : {labels.get('expected_confidence', '?')}")
-    print(f"  Anomaly Flag : {labels.get('anomaly_flag', False)}")
-    print(f"  Repeat       : {repeat}x")
+    print(f"  Vessel Type    : {labels.get('vessel_type', '?')}")
+    print(f"  Confidence     : {labels.get('expected_confidence', '?')}")
+    print(f"  Anomaly Flag   : {labels.get('anomaly_flag', False)}")
+    print(f"  Original Trace : {chunk.get('trace_id', 'N/A')}")
+    print(f"  Repeat         : {repeat}x")
     print(f"{'='*60}\n")
 
+    import uuid
     for i in range(repeat):
+        # Each replay emission gets a fresh trace_id to track uniquely
         chunk["timestamp"] = time.time()
+        chunk["trace_id"]  = str(uuid.uuid4())
         transport.send(chunk)
         time.sleep(random.uniform(delay_ms_min / 1000.0, delay_ms_max / 1000.0))
 
@@ -125,7 +142,7 @@ def stream_all_scenarios(scenarios_dir="scenarios", delay_ms_min=20, delay_ms_ma
         index = json.load(f)
 
     print(f"\n{'='*60}")
-    print(f"SVACS FULL DEMO SUITE — {index['total']} scenarios")
+    print(f"SVACS FULL DEMO SUITE -- {index['total']} scenarios")
     print(f"{'='*60}")
 
     for entry in index["scenarios"]:

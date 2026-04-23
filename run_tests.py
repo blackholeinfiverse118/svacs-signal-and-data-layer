@@ -22,8 +22,8 @@ import time
 import argparse
 import json
 
-# ------------------------------------------------------------------ #
-#  SETUP                                                              #
+
+#  SETUP                                                              
 # ------------------------------------------------------------------ #
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -47,8 +47,8 @@ def section(title: str):
     print(f"{'='*60}")
 
 
-# ------------------------------------------------------------------ #
-#  TEST 1 — SIGNAL GENERATOR                                         #
+
+#  TEST 1 — SIGNAL GENERATOR                                         
 # ------------------------------------------------------------------ #
 
 def test_signal_generator():
@@ -73,8 +73,8 @@ def test_signal_generator():
     return all_pass
 
 
-# ------------------------------------------------------------------ #
-#  TEST 2 — HYBRID BUILDER                                           #
+
+#  TEST 2 — HYBRID BUILDER                                           
 # ------------------------------------------------------------------ #
 
 def test_hybrid_builder():
@@ -102,8 +102,8 @@ def test_hybrid_builder():
     return all_pass
 
 
-# ------------------------------------------------------------------ #
-#  TEST 3 — SCENARIO BUILDER                                         #
+
+#  TEST 3 — SCENARIO BUILDER                                         
 # ------------------------------------------------------------------ #
 
 def test_scenario_builder():
@@ -131,8 +131,8 @@ def test_scenario_builder():
     return all_pass
 
 
-# ------------------------------------------------------------------ #
-#  TEST 4 — STREAMING SIMULATOR                                       #
+
+#  TEST 4 — STREAMING SIMULATOR                                       
 # ------------------------------------------------------------------ #
 
 def test_streaming():
@@ -153,8 +153,8 @@ def test_streaming():
         return False
 
 
-# ------------------------------------------------------------------ #
-#  TEST 5 — SIGNAL VALIDATION                                        #
+
+#  TEST 5 — SIGNAL VALIDATION                                        
 # ------------------------------------------------------------------ #
 
 def test_signal_validation():
@@ -193,8 +193,8 @@ def test_signal_validation():
     return all_pass
 
 
-# ------------------------------------------------------------------ #
-#  TEST 6 — VISUALIZATION                                            #
+
+#  TEST 6 — VISUALIZATION                                            
 # ------------------------------------------------------------------ #
 
 def test_visualization(save_plots: bool = True):
@@ -226,8 +226,8 @@ def test_visualization(save_plots: bool = True):
     return all_pass
 
 
-# ------------------------------------------------------------------ #
-#  SIGNAL DISTINGUISHABILITY CHECK                                   #
+
+#  SIGNAL DISTINGUISHABILITY CHECK                                   
 # ------------------------------------------------------------------ #
 
 def test_distinguishability():
@@ -249,16 +249,16 @@ def test_distinguishability():
         )
 
     print(f"\n  Key distinctions:")
-    print(f"    cargo     → lowest freq (50–200 Hz), moderate rms, low variance")
-    print(f"    speedboat → highest freq (500–1500 Hz), highest rms, highest variance")
-    print(f"    submarine → very low freq (20–100 Hz), lowest rms, masked")
+    print(f"    cargo     → lowest freq (50-200 Hz), moderate rms, low variance")
+    print(f"    speedboat → highest freq (500-1500 Hz), highest rms, highest variance")
+    print(f"    submarine → very low freq (20-100 Hz), lowest rms, masked")
     print(f"    low_conf  → any freq, very low rms, high noise ratio")
     print(f"    anomaly   → multi-peak, highest variance, burst artifacts")
     return True
 
 
-# ------------------------------------------------------------------ #
-#  MAIN                                                               #
+
+#  MAIN                                                               
 # ------------------------------------------------------------------ #
 
 if __name__ == "__main__":
@@ -298,12 +298,12 @@ if __name__ == "__main__":
     passed = sum(1 for v in results.values() if v)
     total  = len(results)
     for test_name, result in results.items():
-        icon = "✓ PASS" if result else "✗ FAIL"
+        icon = " PASS" if result else " FAIL"
         print(f"  {icon}  {test_name}")
 
     print(f"\n  Total: {passed}/{total} passed")
     if passed == total:
-        print("\n  ✅ ALL TESTS PASSED — Pipeline input layer is ready.")
+        print("\n   ALL TESTS PASSED — Pipeline input layer is ready.")
     else:
-        print("\n  ⚠️  SOME TESTS FAILED — Check errors above.")
+        print("\n   SOME TESTS FAILED — Check errors above.")
     print()

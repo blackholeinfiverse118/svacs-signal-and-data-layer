@@ -12,7 +12,7 @@ import numpy as np
 from typing import Dict, List, Any
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 #  Signal statistics
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -55,7 +55,7 @@ def snr_db(signal: list, noise_estimate: list) -> float:
     return float(20 * np.log10(s / n))
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 #  Chunk validation
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -91,7 +91,7 @@ def validate_batch(chunks: list) -> list:
     return [validate_chunk(c) for c in chunks]
 
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 #  Rule-based classifier (lightweight, no ML)
 # ══════════════════════════════════════════════════════════════════════════════
 
@@ -110,7 +110,7 @@ def rule_classify(chunk: dict) -> dict:
     Returns:
         {
           "predicted_type": str,
-          "confidence": float (0–1),
+          "confidence": float (0-1),
           "dominant_freq_hz": float,
           "rms": float,
           "anomaly": bool
@@ -197,7 +197,7 @@ def summarize(chunk: dict) -> dict:
         "confidence_expected": chunk.get("metadata", {}).get("confidence_expected", "unknown")
     }
 
-# ══════════════════════════════════════════════════════════════════════════════
+
 #  Quick test
 # ══════════════════════════════════════════════════════════════════════════════
 

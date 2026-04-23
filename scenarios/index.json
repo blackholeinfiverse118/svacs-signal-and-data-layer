@@ -7,16 +7,18 @@
       "vessel_type": "cargo",
       "expected_confidence": "high",
       "scenario_type": "normal_classification",
-      "anomaly_flag": false
+      "anomaly_flag": false,
+      "description": "Stable low-frequency cargo ship signal (50-200 Hz). Steady amplitude, minimal noise. Clean FFT peak in cargo range. Use as pipeline baseline."
     },
     {
       "id": 2,
-      "name": "Speedboat \u2014 Clear Classification",
+      "name": "Speedboat -- Clear Classification",
       "file": "scenario_2_speedboat.json",
       "vessel_type": "speedboat",
       "expected_confidence": "medium_high",
       "scenario_type": "normal_classification",
-      "anomaly_flag": false
+      "anomaly_flag": false,
+      "description": "High-frequency speedboat signal (500-1500 Hz). Irregular waveform with 2nd harmonic. High noise from fast engine RPM."
     },
     {
       "id": 3,
@@ -25,7 +27,8 @@
       "vessel_type": "submarine",
       "expected_confidence": "medium",
       "scenario_type": "stealth_detection",
-      "anomaly_flag": false
+      "anomaly_flag": false,
+      "description": "Very low frequency submarine signal (20-100 Hz). Low energy, partially masked by stealth factor (0.25-0.60x). Signal is near-infrasonic."
     },
     {
       "id": 4,
@@ -34,16 +37,18 @@
       "vessel_type": "low_confidence",
       "expected_confidence": "low",
       "scenario_type": "low_confidence",
-      "anomaly_flag": false
+      "anomaly_flag": false,
+      "description": "Weak signal (amplitude 0.1-0.2) buried under heavy ocean noise (0.5-0.8). Simulates distant vessel, degraded hydrophone, or heavy sea state."
     },
     {
       "id": 5,
-      "name": "Anomaly \u2014 Unknown Pattern",
+      "name": "Anomaly -- Unknown Pattern",
       "file": "scenario_5_anomaly.json",
       "vessel_type": "anomaly",
       "expected_confidence": "unknown",
       "scenario_type": "anomaly",
-      "anomaly_flag": true
+      "anomaly_flag": true,
+      "description": "Multi-frequency spike pattern (3-7 components, 10-2000 Hz each) with random amplitude bursts at 12 positions. Does NOT match any known vessel propulsion profile."
     }
   ],
   "total": 5
